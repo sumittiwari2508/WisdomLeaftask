@@ -14,27 +14,38 @@ class DataViewController: UIViewController {
     var dataArray: [DataModel] = []
     var dataRefreshControl = UIRefreshControl()
     var selectedData = [Int]()
+    var spinner = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        spinner = UIActivityIndicatorView(style: .whiteLarge)
+        spinner.stopAnimating()
+        spinner.hidesWhenStopped = true
+        spinner.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60)
+        tblView.tableFooterView = spinner
         
         title = "Author Data"
         tblView.delegate = self
         tblView.dataSource = self
         tblView.register(UINib(nibName: "DataTableViewCell", bundle: nil), forCellReuseIdentifier: "DataTableViewCell")
-        dataRefreshControl.attributedTitle = NSAttributedString(string: "Pull to fetch more data")
+        dataRefreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         tblView.refreshControl = dataRefreshControl
         dataRefreshControl.addTarget(self, action: #selector(pullToRefreshData(sender:)), for: .valueChanged)
         callDataApi()
     }
     
     @objc func pullToRefreshData(sender: UIRefreshControl){
-        page = page + 1
-        self.callDataApi()
+        if page > 1{
+            page = page - 1
+            self.callDataApi()
+            
+        }
         dataRefreshControl.endRefreshing()
     }
     
     @IBAction func onClickRefresh(_ sender: UIBarButtonItem) {
         selectedData.removeAll()
+        tblView.setContentOffset(.zero, animated: true)
         page =  1
         self.callDataApi()
     }
@@ -74,6 +85,23 @@ extension DataViewController: UITableViewDataSource,UITableViewDelegate{
             let alert = UIAlertController(title: "Alert", message: "Please select checkbox to view description", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let offset = scrollView.contentOffset
+        let bounds = scrollView.bounds
+        let size = scrollView.contentSize
+        let inset = scrollView.contentInset
+        
+        let y = offset.y + bounds.size.height - inset.bottom
+        let h = size.height
+        
+        let reloadDistance = CGFloat(30.0)
+        if y > h + reloadDistance {
+            self.selectedData.removeAll()
+            self.page = self.page + 1
+            self.callDataApi()
         }
     }
     

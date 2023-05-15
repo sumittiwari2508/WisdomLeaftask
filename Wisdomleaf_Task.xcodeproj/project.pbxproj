@@ -82,12 +82,12 @@
 		958A7DC12A125C80009E3A81 /* Wisdomleaf_Task */ = {
 			isa = PBXGroup;
 			children = (
+				958A7DD62A125CE8009E3A81 /* AppDelegate */,
+				958A7DD72A125CF1009E3A81 /* Supporting Files */,
+				958A7DD92A125D04009E3A81 /* Model */,
 				958A7DDB2A125D1E009E3A81 /* TV Cell */,
 				958A7DDA2A125D09009E3A81 /* Controller */,
-				958A7DD92A125D04009E3A81 /* Model */,
 				958A7DD82A125CFD009E3A81 /* Views */,
-				958A7DD72A125CF1009E3A81 /* Supporting Files */,
-				958A7DD62A125CE8009E3A81 /* AppDelegate */,
 				958A7DCB2A125C82009E3A81 /* Assets.xcassets */,
 				958A7DCD2A125C82009E3A81 /* LaunchScreen.storyboard */,
 				958A7DD02A125C82009E3A81 /* Info.plist */,
